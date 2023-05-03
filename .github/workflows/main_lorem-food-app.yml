@@ -17,8 +17,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Java version
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Build with Maven
@@ -51,5 +52,3 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_683FDC04D7F249C0B5DAFECEB665B377 }}
           package: '*.jar'
-runs:
-  using: 'node16'
