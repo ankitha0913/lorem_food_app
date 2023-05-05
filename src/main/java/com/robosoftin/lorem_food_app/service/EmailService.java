@@ -13,8 +13,8 @@ import java.util.Properties;
 
 @Service
 public class EmailService {
-    @Autowired
-    private JavaMailSender javaMailSender;
+//    @Autowired
+//    private JavaMailSender javaMailSender;
     private static final String username = "developer.ankitha@gmail.com";
     private static final String password = "bdicjtfsjsgtbswg";
 
