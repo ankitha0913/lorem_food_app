@@ -3,6 +3,7 @@ package com.robosoftin.lorem_food_app.service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class OtpService {
-    private static final Integer EXPIRE_MINS = 4;
+    private static final Integer EXPIRE_MINS = 1;
     private LoadingCache<String,Integer> otpCache;
 
     public OtpService(){
@@ -33,15 +34,18 @@ public class OtpService {
         return otp;
     }
 
-    public int getOtp(String key){
-        try {
-            return otpCache.get(key);
-        } catch (ExecutionException e) {
-            return 0;
+    public boolean validateOtp(String emailId,int otp) throws ExecutionException{
+        int cacheOtp=otpCache.get(emailId);
+        if(cacheOtp==0)
+        {
+            otpCache.invalidate(emailId);
+            throw new UnauthorizedException("OTP has been Expired or was not generated for emailId -"+emailId);
         }
-    }
-
-    public void clearOTP(String key){
-        otpCache.invalidate(key);
+        else if(cacheOtp!=otp)
+            throw new UnauthorizedException("Invalid OTP");
+        else {
+            otpCache.invalidate(emailId);
+            return true;
+        }
     }
 }
