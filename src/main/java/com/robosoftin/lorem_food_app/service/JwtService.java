@@ -20,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class JwtService implements UserDetailsService {
@@ -49,7 +51,7 @@ public class JwtService implements UserDetailsService {
             final UserDetails userDetails =loadUserByUsername(user.getEmailId());
             final String token = jwtUtility.generateToken(userDetails);
             final String refreshToken = refreshTokenService.createRefreshToken(user.getId()).getToken();
-            return new JwtResponse(token,refreshToken,"User Registration Successful");
+            return new JwtResponse(token,refreshToken,"User Registration Successful",getUserData(user));
     }
 
     public JwtResponse loginUser(JwtRequest jwtRequest){
@@ -65,6 +67,24 @@ public class JwtService implements UserDetailsService {
         final String token = jwtUtility.generateToken(userDetails);
         UserInfo user=userRepository.findByEmailId(userDetails.getUsername());
         final String refreshToken = refreshTokenService.createRefreshToken(user.getId()).getToken();
-        return new JwtResponse(token,refreshToken,"User LoggedIn Successfully");
+        return new JwtResponse(token,refreshToken,"User LoggedIn Successfully",getUserData(user));
+    }
+
+    public UserInfo updateUserPassword(String emailId,String newPassword){
+        final UserDetails userDetails =loadUserByUsername(emailId);
+        UserInfo user = userRepository.findByEmailId(userDetails.getUsername());
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return user;
+    }
+
+    private Map<String,String> getUserData(UserInfo user){
+        final Map<String,String> userInformation = new HashMap<>();
+        userInformation.put("emailId",user.getEmailId());
+        userInformation.put("firstName",user.getFirstName());
+        userInformation.put("lastName",user.getLastName());
+        if (user.getMobileNo()!=null)
+            userInformation.put("mobileNo",user.getMobileNo());
+        return userInformation;
     }
 }

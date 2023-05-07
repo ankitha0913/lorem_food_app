@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class OtpService {
-    private static final Integer EXPIRE_MINS = 1;
+    private static final Integer EXPIRE_MINS = 2;
     private LoadingCache<String,Integer> otpCache;
 
     public OtpService(){

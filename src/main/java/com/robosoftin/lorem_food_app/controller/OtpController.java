@@ -4,6 +4,7 @@ import com.robosoftin.lorem_food_app.model.OtpValidationRequest;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.service.EmailService;
 import com.robosoftin.lorem_food_app.service.OtpService;
+import com.robosoftin.lorem_food_app.service.SecretCodeService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,16 +22,20 @@ public class OtpController {
     @Autowired
     public EmailService emailService;
 
-    @GetMapping("/generateOtp/{emailId}")
+    @Autowired
+    private SecretCodeService secretCodeService;
+
+    @GetMapping("/generate-otp/{emailId}")
     public ResponseEntity<StatusResponse> generateOtp(@PathVariable String emailId) throws MessagingException {
         int otp=otpService.generateOtp(emailId);
         emailService.sendOtpMessage(emailId,"OTP Verification",otp+" is the OTP to verify your emailId.");
         return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(true, HttpStatus.OK.value(), "OTP sent"));
     }
 
-    @PostMapping("/validateOtp")
+    @PostMapping("/validate-otp")
     public ResponseEntity<StatusResponse> validateOtp(@RequestBody OtpValidationRequest request) throws ExecutionException {
         boolean isValid = otpService.validateOtp(request.getEmailId(),request.getOtp());
-        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(isValid, HttpStatus.OK.value(), "OTP valid"));
+        String secretCode = secretCodeService.generateSecretCode(request.getEmailId());
+        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(isValid, HttpStatus.OK.value(), "OTP valid",secretCode));
     }
 }
