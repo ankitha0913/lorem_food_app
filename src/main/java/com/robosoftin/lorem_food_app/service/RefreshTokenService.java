@@ -4,6 +4,7 @@ import com.robosoftin.lorem_food_app.dao.RefreshTokenRepository;
 import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.RefreshToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

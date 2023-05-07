@@ -25,6 +25,7 @@ import java.util.Map;
 
 @Service
 public class JwtService implements UserDetailsService {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
