@@ -6,15 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.io.Serializable;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Table(name = "user")
-public class UserInfo{
+public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

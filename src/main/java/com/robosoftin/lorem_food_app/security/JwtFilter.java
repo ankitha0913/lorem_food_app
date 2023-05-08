@@ -1,8 +1,9 @@
-package com.robosoftin.lorem_food_app.config;
+package com.robosoftin.lorem_food_app.security;
 import com.robosoftin.lorem_food_app.exception.BearerTokenNotFoundException;
 import com.robosoftin.lorem_food_app.service.JwtService;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

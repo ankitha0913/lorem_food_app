@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class AuthExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<AuthErrorResponse> handleException(Exception exc){
-        String exceptionType=exc.getClass().getName().substring(11);//40
+        String exceptionType=exc.getClass().getName().substring(40);
         HttpStatus httpStatus=getStatus(exceptionType);
         AuthErrorResponse error = new AuthErrorResponse();
         error.setStatusCode(httpStatus.value());
