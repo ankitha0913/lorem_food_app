@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication()
 @EnableJpaRepositories("com.robosoftin.lorem_food_app.dao")
-public class LoremFoodAppApplication{
+public class LoremFoodAppApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(LoremFoodAppApplication.class, args);
 	}
