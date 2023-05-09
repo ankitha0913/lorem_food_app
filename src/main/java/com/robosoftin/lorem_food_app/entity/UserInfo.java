@@ -18,6 +18,7 @@ public class UserInfo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
     private String emailId;
     private String firstName;
     private String lastName;
