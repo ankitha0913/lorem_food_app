@@ -5,18 +5,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @ToString
 public class StatusResponse {
-    private boolean status;
     private int statusCode;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
 
-    public StatusResponse(boolean status, int statusCode, String message) {
-        this.status = status;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List data;
+
+    public StatusResponse(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
+    }
+
+    public StatusResponse(int statusCode, List data) {
+        this.statusCode = statusCode;
+        this.data = data;
+    }
+
+    public StatusResponse(int statusCode, String message, String secretCode) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.secretCode = secretCode;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

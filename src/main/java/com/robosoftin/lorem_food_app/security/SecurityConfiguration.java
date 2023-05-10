@@ -1,4 +1,4 @@
-package com.robosoftin.lorem_food_app.config;
+package com.robosoftin.lorem_food_app.security;
 import com.robosoftin.lorem_food_app.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration{
 
     @Autowired
@@ -29,12 +28,9 @@ public class SecurityConfiguration{
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-//        AuthenticationManagerBuilder authenticationManagerBuilder =http.getSharedObject(AuthenticationManagerBuilder.class);
-//        authenticationManagerBuilder.userDetailsService(jwtService).passwordEncoder(passwordEncoder());
-//        AuthenticationManager manager = authenticationManagerBuilder.build();
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/user/**")
+                .requestMatchers("/api/user/**","/api/restaurant/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -53,13 +49,6 @@ public class SecurityConfiguration{
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
-
-//    @Bean(name="entityManagerFactory")
-//    public LocalSessionFactoryBean sessionFactory() {
-//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//
-//        return sessionFactory;
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

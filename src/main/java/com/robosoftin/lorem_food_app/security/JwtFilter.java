@@ -1,4 +1,4 @@
-package com.robosoftin.lorem_food_app.config;
+package com.robosoftin.lorem_food_app.security;
 import com.robosoftin.lorem_food_app.exception.BearerTokenNotFoundException;
 import com.robosoftin.lorem_food_app.service.JwtService;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
@@ -50,6 +50,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.startsWith("/api/user/");
+        return path.startsWith("/api/user/") || path.startsWith("/api/restaurant/");
     }
 }

@@ -34,7 +34,7 @@ public class OtpService {
         return otp;
     }
 
-    public boolean validateOtp(String emailId,int otp) throws ExecutionException{
+    public void validateOtp(String emailId,int otp) throws ExecutionException{
         int cacheOtp=otpCache.get(emailId);
         if(cacheOtp==0)
         {
@@ -45,7 +45,6 @@ public class OtpService {
             throw new UnauthorizedException("Invalid OTP");
         else {
             otpCache.invalidate(emailId);
-            return true;
         }
     }
 }

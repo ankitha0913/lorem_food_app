@@ -8,7 +8,6 @@ import com.robosoftin.lorem_food_app.model.JwtRequest;
 import com.robosoftin.lorem_food_app.model.JwtResponse;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

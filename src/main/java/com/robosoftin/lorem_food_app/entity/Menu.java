@@ -19,5 +19,5 @@ public class Menu {
     private String name;
     @OneToOne(targetEntity = Restaurant.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "rest_id", referencedColumnName = "id")
-    private int restId;
+    private Restaurant restaurant;
 }

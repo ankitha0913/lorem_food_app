@@ -28,13 +28,15 @@ public class OtpController {
     public ResponseEntity<StatusResponse> generateOtp(@PathVariable String emailId) throws MessagingException {
         int otp=otpService.generateOtp(emailId);
         emailService.sendOtpMessage(emailId,"OTP Verification",otp+" is the OTP to verify your emailId.");
-        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(true, HttpStatus.OK.value(), "OTP sent"));
+        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), "OTP sent"));
     }
 
     @PostMapping("/validate-otp")
     public ResponseEntity<StatusResponse> validateOtp(@RequestBody OtpValidationRequest request) throws ExecutionException {
-        boolean isValid = otpService.validateOtp(request.getEmailId(),request.getOtp());
+        otpService.validateOtp(request.getEmailId(),request.getOtp());
+        if(request.isRegister())
+            return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse( HttpStatus.OK.value(), "OTP valid"));
         String secretCode = secretCodeService.generateSecretCode(request.getEmailId());
-        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(isValid, HttpStatus.OK.value(), "OTP valid",secretCode));
+        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), "OTP valid",secretCode));
     }
 }

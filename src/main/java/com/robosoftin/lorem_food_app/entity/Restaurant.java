@@ -28,5 +28,6 @@ public class Restaurant {
     private String openTime;
     private String closeTime;
     private String image;
+    private boolean breakfastAvailable;
 }
 

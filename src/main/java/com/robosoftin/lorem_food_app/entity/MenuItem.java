@@ -28,6 +28,6 @@ public class MenuItem {
     private double rating;
     @ManyToOne(targetEntity = Menu.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
-    private int menuId;
+    private Menu menu;
     private String image;
 }

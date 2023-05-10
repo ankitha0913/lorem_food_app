@@ -12,4 +12,5 @@ import lombok.ToString;
 public class OtpValidationRequest {
     private String emailId;
     private int otp;
+    private boolean isRegister;
 }

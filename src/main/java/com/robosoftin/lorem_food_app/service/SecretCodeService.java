@@ -33,7 +33,7 @@ public class SecretCodeService {
         return code;
     }
 
-    public boolean validateOtp(String emailId,String code) throws ExecutionException {
+    public void validateOtp(String emailId,String code) throws ExecutionException {
         String cacheCode=secretCodeCache.get(emailId);
         if(cacheCode=="EXPIRED")
         {
@@ -44,7 +44,6 @@ public class SecretCodeService {
             throw new UnauthorizedException("Invalid Secret Code");
         else {
             secretCodeCache.invalidate(emailId);
-            return true;
         }
     }
 }

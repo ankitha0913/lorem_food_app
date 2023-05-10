@@ -7,8 +7,8 @@ import java.util.Properties;
 
 @Service
 public class EmailService {
-    private static final String username = "projectrobo456@gmail.com";
-    private static final String password = "lzcuzcmvzybwfkhr";
+    private static final String username = "ankitha.robosoftin@gmail.com";
+    private static final String password = "sruhowqrcjljqeeh";
 
     public void sendOtpMessage(String to,String subject,String msg) throws MessagingException {
 
@@ -18,14 +18,17 @@ public class EmailService {
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
 
-        Session session = Session.getInstance(properties,new Authenticator() {
+        Session session = Session.getInstance(properties,
+                new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication(){
                 return new PasswordAuthentication(username,password);
             }
-        });
+        }
+        );
 
         MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
+
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(subject);
             message.setText(msg);
