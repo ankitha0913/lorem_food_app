@@ -1,5 +1,6 @@
 package com.robosoftin.lorem_food_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.robosoftin.lorem_food_app.enums.DishType;
 import com.robosoftin.lorem_food_app.enums.RestaurantStatus;
 import jakarta.persistence.*;
@@ -28,6 +29,19 @@ public class MenuItem {
     private double rating;
     @ManyToOne(targetEntity = Menu.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Menu menu;
     private String image;
+
+    public MenuItem(int id,String name, String description, DishType dishType, boolean breakfast, boolean veg, double price, double rating, String image) {
+        this.id=id;
+        this.name = name;
+        this.description = description;
+        this.dishType = dishType;
+        this.breakfast = breakfast;
+        this.veg = veg;
+        this.price = price;
+        this.rating = rating;
+        this.image = image;
+    }
 }

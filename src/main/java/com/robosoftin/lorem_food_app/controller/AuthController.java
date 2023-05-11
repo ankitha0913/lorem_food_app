@@ -17,6 +17,9 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.PATCH},
+        origins = {"http://localhost:8080","https://main-sphere-386011.uc.r.appspot.com"})
 public class AuthController {
 
         @Autowired

@@ -11,13 +11,13 @@ import java.util.List;
 public class RestaurantService {
     @Autowired
     private RestaurantRepository restaurantRepository;
-    public List<Restaurant> getRestaurantsByPattern(String pattern){
+    public List<Restaurant> getRestaurantsByPattern(String pattern,String city,String state,String country){
         String keyword=pattern.toLowerCase();
         if(keyword.equals("breakfast"))
-            return restaurantRepository.findBreakfastRestaurants();
+            return restaurantRepository.findBreakfastRestaurants(city,state,country);
         else if(keyword.equals("lunch") || keyword.equals("dinner"))
-            return restaurantRepository.findAll();
+            return restaurantRepository.findAllRestaurants(city,state,country);
         else
-            return restaurantRepository.findByPattern(pattern);
+            return restaurantRepository.findByPattern(pattern,city,state,country);
     }
 }

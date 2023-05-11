@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice()
 public class AuthExceptionHandler {
-    @ExceptionHandler
-    public ResponseEntity<AuthErrorResponse> handleException(Exception exc){
-        return errorResponse(HttpStatus.BAD_REQUEST,exc.getMessage());
-    }
+//    @ExceptionHandler
+//    public ResponseEntity<AuthErrorResponse> handleException(Exception exc){
+//        return errorResponse(HttpStatus.BAD_REQUEST,exc.getMessage());
+//    }
 
     @ExceptionHandler
     public ResponseEntity<AuthErrorResponse> handleException(UnauthorizedException exc){

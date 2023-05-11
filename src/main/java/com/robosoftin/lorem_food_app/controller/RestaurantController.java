@@ -13,26 +13,30 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/restaurant")
+@CrossOrigin(
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.PATCH},
+        origins = {"http://localhost:8080","https://main-sphere-386011.uc.r.appspot.com"})
 public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
     @Autowired
     private MenuService menuService;
     @GetMapping("/search")
-    public ResponseEntity<StatusResponse> search(@RequestParam String query){
-        List<Restaurant> restaurantList=restaurantService.getRestaurantsByPattern(query);
+    public ResponseEntity<StatusResponse> search(@RequestParam String query,@RequestParam String city,@RequestParam String state,@RequestParam String country){
+        List<Restaurant> restaurantList=restaurantService.getRestaurantsByPattern(query,city,state,country);
         return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), restaurantList));
     }
 
-    @GetMapping("/{restaurantName}")
-    public ResponseEntity<StatusResponse> fetchMenu(@PathVariable String restaurantName){
-         List<MenuItem> menuItemList=menuService.fetchMenu(restaurantName);
+    @GetMapping("/{restId}/menu")
+    public ResponseEntity<StatusResponse> fetchMenu(@PathVariable int restId){
+         List<MenuItem> menuItemList=menuService.fetchMenu(restId);
         return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), menuItemList));
     }
 
-//    @GetMapping("/{restaurantName}/search")
-//    public ResponseEntity<StatusResponse> search(@PathVariable String restaurantName,@RequestParam String query){
-//
-//    }
+    @GetMapping("/{restId}/menu/search")
+    public ResponseEntity<StatusResponse> searchInMenu(@PathVariable int restId,@RequestParam String query){
+        List<MenuItem> menuItemList=menuService.getMenuItemsByPattern(restId,query);
+        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), menuItemList));
+    }
 
 }
