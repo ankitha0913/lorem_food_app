@@ -1,8 +1,7 @@
 package com.robosoftin.lorem_food_app.service;
 
 import com.robosoftin.lorem_food_app.dao.MenuItemRepository;
-import com.robosoftin.lorem_food_app.entity.MenuItem;
-import com.robosoftin.lorem_food_app.entity.Restaurant;
+import com.robosoftin.lorem_food_app.entity.Restaurant.MenuItem;
 import com.robosoftin.lorem_food_app.enums.DishCategory;
 import com.robosoftin.lorem_food_app.enums.DishType;
 import org.springframework.beans.factory.annotation.Autowired;

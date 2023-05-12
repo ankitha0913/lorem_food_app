@@ -1,6 +1,6 @@
 package com.robosoftin.lorem_food_app.controller;
-import com.robosoftin.lorem_food_app.entity.MenuItem;
-import com.robosoftin.lorem_food_app.entity.Restaurant;
+import com.robosoftin.lorem_food_app.entity.Restaurant.MenuItem;
+import com.robosoftin.lorem_food_app.entity.Restaurant.Restaurant;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.service.MenuService;
 import com.robosoftin.lorem_food_app.service.RestaurantService;

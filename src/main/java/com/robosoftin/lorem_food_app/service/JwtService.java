@@ -1,7 +1,7 @@
 package com.robosoftin.lorem_food_app.service;
 
 import com.robosoftin.lorem_food_app.dao.UserRepository;
-import com.robosoftin.lorem_food_app.entity.UserInfo;
+import com.robosoftin.lorem_food_app.entity.Auth.UserInfo;
 import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
 import com.robosoftin.lorem_food_app.exception.UserNotFoundException;
 import com.robosoftin.lorem_food_app.model.JwtRequest;

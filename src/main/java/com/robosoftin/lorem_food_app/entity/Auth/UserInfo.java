@@ -1,4 +1,4 @@
-package com.robosoftin.lorem_food_app.entity;
+package com.robosoftin.lorem_food_app.entity.Auth;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 @Table(name = "user")
-public class UserInfo implements Serializable {
+public class UserInfo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

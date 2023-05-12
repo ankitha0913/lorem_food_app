@@ -1,8 +1,8 @@
-package com.robosoftin.lorem_food_app.entity;
+package com.robosoftin.lorem_food_app.entity.Restaurant;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.robosoftin.lorem_food_app.entity.Restaurant.Menu;
 import com.robosoftin.lorem_food_app.enums.DishType;
-import com.robosoftin.lorem_food_app.enums.RestaurantStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.robosoftin.lorem_food_app.dao;
 
-import com.robosoftin.lorem_food_app.entity.Restaurant;
+import com.robosoftin.lorem_food_app.entity.Restaurant.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

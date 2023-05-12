@@ -1,5 +1,6 @@
-package com.robosoftin.lorem_food_app.entity;
+package com.robosoftin.lorem_food_app.entity.Restaurant;
 
+import com.robosoftin.lorem_food_app.entity.Restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

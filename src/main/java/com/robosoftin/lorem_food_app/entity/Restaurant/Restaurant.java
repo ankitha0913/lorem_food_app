@@ -1,4 +1,4 @@
-package com.robosoftin.lorem_food_app.entity;
+package com.robosoftin.lorem_food_app.entity.Restaurant;
 
 import com.robosoftin.lorem_food_app.enums.RestaurantStatus;
 import jakarta.persistence.*;
@@ -29,5 +29,9 @@ public class Restaurant {
     private String closeTime;
     private String image;
     private boolean breakfastAvailable;
+    private int deliveryTimeInMins;
+    private double min_order_cost;
+    private double avg_meal_cost;
+    private String food_types;
 }
 

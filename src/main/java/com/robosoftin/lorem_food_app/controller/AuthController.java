@@ -1,6 +1,6 @@
 package com.robosoftin.lorem_food_app.controller;
 
-import com.robosoftin.lorem_food_app.entity.UserInfo;
+import com.robosoftin.lorem_food_app.entity.Auth.UserInfo;
 import com.robosoftin.lorem_food_app.model.JwtResponse;
 import com.robosoftin.lorem_food_app.model.JwtRequest;
 import com.robosoftin.lorem_food_app.model.StatusResponse;

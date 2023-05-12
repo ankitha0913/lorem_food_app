@@ -1,7 +1,7 @@
 package com.robosoftin.lorem_food_app.service;
 
 import com.robosoftin.lorem_food_app.dao.RestaurantRepository;
-import com.robosoftin.lorem_food_app.entity.Restaurant;
+import com.robosoftin.lorem_food_app.entity.Restaurant.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
