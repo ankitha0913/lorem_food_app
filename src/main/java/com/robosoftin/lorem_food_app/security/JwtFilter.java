@@ -1,8 +1,11 @@
 package com.robosoftin.lorem_food_app.security;
 import com.robosoftin.lorem_food_app.exception.BearerTokenNotFoundException;
+import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
 import com.robosoftin.lorem_food_app.service.JwtService;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JwtService jwtService;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
@@ -32,7 +34,14 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = null;
         if(authorization!=null && authorization.startsWith("Bearer ")){
             token = authorization.substring(7);
-            username = jwtUtility.getUsernameFromToken(token);
+            try
+            {
+                username = jwtUtility.getUsernameFromToken(token);
+            }
+            catch (ExpiredJwtException exception)
+            {
+                throw new UnauthorizedException("Token Expired!");
+            }
         }
         else
             throw new BearerTokenNotFoundException("Couldn't find bearer token");
@@ -43,6 +52,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
+            else
+                throw new UnauthorizedException("Invalid Token");
             filterChain.doFilter(request,response);
         }
     }

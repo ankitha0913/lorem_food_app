@@ -1,6 +1,7 @@
 package com.robosoftin.lorem_food_app.controller;
 
 import com.robosoftin.lorem_food_app.model.CartRequest;
+import com.robosoftin.lorem_food_app.model.ClearCartRequest;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,18 @@ public class CartController {
     @PostMapping("/add-item")
     public ResponseEntity<StatusResponse> addToCart(@RequestBody CartRequest cartRequest) {
         StatusResponse statusResponse = cartItemService.addToCartItem(cartRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
+    }
+
+    @DeleteMapping("/clear-cart")
+    public ResponseEntity<StatusResponse> clearCart(@RequestBody ClearCartRequest clearCartRequest) {
+        StatusResponse statusResponse = cartItemService.clearCart(clearCartRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
+    }
+
+    @DeleteMapping("/delete-item")
+    public ResponseEntity<StatusResponse> deleteFromCart(@RequestBody CartRequest cartRequest) {
+        StatusResponse statusResponse = cartItemService.deleteCartItem(cartRequest);
         return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
     }
 }

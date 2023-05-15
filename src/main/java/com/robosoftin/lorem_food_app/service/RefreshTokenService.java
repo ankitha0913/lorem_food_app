@@ -3,15 +3,20 @@ package com.robosoftin.lorem_food_app.service;
 import com.robosoftin.lorem_food_app.dao.RefreshTokenRepository;
 import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.Auth.RefreshToken;
+import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
+import com.robosoftin.lorem_food_app.model.JwtResponse;
+import com.robosoftin.lorem_food_app.model.StatusResponse;
+import com.robosoftin.lorem_food_app.utility.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 import java.util.UUID;
+
+import static java.time.Instant.now;
 
 @Service
 public class RefreshTokenService {
-    //3 days
+    //3 days- 60 * 60 * 24 * 3
     static final long REFRESH_TOKEN_VALIDITY = 60 * 60 * 24 * 3;
 
     @Autowired
@@ -19,15 +24,47 @@ public class RefreshTokenService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtUtility jwtUtility;
 
     public RefreshToken createRefreshToken(int userId) {
         RefreshToken refreshToken = new RefreshToken();
 
         refreshToken.setUser(userRepository.findById(userId).get());
-        refreshToken.setExpiryDate(Instant.now().plusMillis(REFRESH_TOKEN_VALIDITY));
+        refreshToken.setExpiryDate(now().plusMillis(REFRESH_TOKEN_VALIDITY));
         refreshToken.setToken(UUID.randomUUID().toString());
 
         refreshToken = refreshTokenRepository.save(refreshToken);
         return refreshToken;
+    }
+
+    public String getUsernameFromToken(String token)
+    {
+        RefreshToken refreshToken=refreshTokenRepository.findByToken(token);
+        if (refreshToken==null)
+            throw new UnauthorizedException("Invalid Refresh Token");
+        return refreshToken.getUser().getEmailId();
+    }
+
+    public boolean validateToken(String token,String emailId)
+    {
+        RefreshToken refreshToken=refreshTokenRepository.findByToken(token);
+        if (emailId.equals(refreshToken.getUser().getEmailId()))
+        {
+            if (now().isAfter(refreshToken.getExpiryDate()))
+            {
+                refreshTokenRepository.delete(refreshToken);
+                return false;
+            }
+            else
+                return true;
+        }
+        else
+            return false;
+    }
+
+    public JwtResponse generateNewToken(UserDetails userDetails){
+        final String token = jwtUtility.generateToken(userDetails);
+        return new JwtResponse(token,"New Jwt token generated");
     }
 }

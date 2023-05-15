@@ -13,8 +13,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtility{
 
-    //5 hours
-    static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    //5 hours-5 * 60 * 60
+    static final long JWT_TOKEN_VALIDITY =5 * 60 * 60;
 
     @Value("${jwt.secret}")
     private String secretKey;

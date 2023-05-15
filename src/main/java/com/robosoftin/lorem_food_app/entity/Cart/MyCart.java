@@ -12,13 +12,8 @@ import lombok.ToString;
 @ToString
 @Table(name = "my_cart")
 public class MyCart {
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id",columnDefinition = "INT(20) NOT NULL UNIQUE KEY")
-    private int cart_id;
+    @Column(name = "cart_id",unique = true)
+    private Long cartId;
     @EmbeddedId
     private MyCartKey myCartKey;
-
-    public MyCart(MyCartKey myCartKey) {
-        this.myCartKey = myCartKey;
-    }
 }

@@ -5,8 +5,11 @@ import com.robosoftin.lorem_food_app.model.JwtResponse;
 import com.robosoftin.lorem_food_app.model.JwtRequest;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.model.UpdatePasswordRequest;
+import com.robosoftin.lorem_food_app.security.RefreshFilter;
 import com.robosoftin.lorem_food_app.service.JwtService;
+import com.robosoftin.lorem_food_app.service.RefreshTokenService;
 import com.robosoftin.lorem_food_app.service.SecretCodeService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,8 @@ public class AuthController {
         private JwtService jwtService;
         @Autowired
         private SecretCodeService secretCodeService;
+        @Autowired
+        private RefreshTokenService refreshTokenService;
 
         @PostMapping("/register")
         public ResponseEntity<JwtResponse> register(@RequestBody UserInfo userInfo) {
@@ -50,6 +55,13 @@ public class AuthController {
         secretCodeService.validateOtp(request.getEmailId(), request.getSecretCode());
         final UserInfo userInfo = jwtService.updateUserPassword(request.getEmailId(), request.getNewPassword());
         return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(),"Password updated for user "+userInfo.getEmailId()));
+    }
+
+    @GetMapping("/refresh")
+    public ResponseEntity<JwtResponse> refresh(HttpServletRequest httpServletRequest) {
+        String emailId=(String) httpServletRequest.getAttribute(RefreshFilter.emailId);
+        JwtResponse jwtResponse=refreshTokenService.generateNewToken(jwtService.loadUserByUsername(emailId));
+        return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
 
 }
