@@ -34,4 +34,9 @@ public class CartController {
         StatusResponse statusResponse = cartItemService.deleteCartItem(cartRequest);
         return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
     }
+
+    @PostMapping("/test")
+    public ResponseEntity<?> test(CartRequest cartRequest){
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
+    }
 }

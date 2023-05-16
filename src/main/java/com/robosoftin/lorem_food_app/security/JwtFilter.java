@@ -1,11 +1,21 @@
 package com.robosoftin.lorem_food_app.security;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.robosoftin.lorem_food_app.exception.AuthErrorResponse;
+import com.robosoftin.lorem_food_app.exception.AuthExceptionHandler;
 import com.robosoftin.lorem_food_app.exception.BearerTokenNotFoundException;
 import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
+import com.robosoftin.lorem_food_app.service.BlacklistTokenService;
 import com.robosoftin.lorem_food_app.service.JwtService;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,36 +36,64 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private BlacklistTokenService blacklistTokenService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         String authorization = request.getHeader("Authorization");
         String token = null;
         String username = null;
-        if(authorization!=null && authorization.startsWith("Bearer ")){
-            token = authorization.substring(7);
-            try
-            {
-                username = jwtUtility.getUsernameFromToken(token);
-            }
-            catch (ExpiredJwtException exception)
-            {
-                throw new UnauthorizedException("Token Expired!");
-            }
-        }
-        else
-            throw new BearerTokenNotFoundException("Couldn't find bearer token");
-        if (username!=null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails= jwtService.loadUserByUsername(username);
-            if (jwtUtility.validateToken(token,userDetails)){
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        try{
+            if(authorization!=null && authorization.startsWith("Bearer ")){
+                token = authorization.substring(7);
+                    username = jwtUtility.getUsernameFromToken(token);
+                    String requestBody=IOUtils.toString(request.getReader());
+                    JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+                    if(!jsonObject.get("emailId").getAsString().equals(username))
+                        throw new UnauthorizedException("Invalid token!");
             }
             else
-                throw new UnauthorizedException("Invalid Token");
-            filterChain.doFilter(request,response);
+                throw new BearerTokenNotFoundException("Couldn't find bearer token");
+            if (SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails= jwtService.loadUserByUsername(username);
+                if (!blacklistTokenService.isBlacklisted(token) && jwtUtility.validateToken(token,userDetails)){
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+                else
+                    throw new UnauthorizedException("Invalid Token");
+                filterChain.doFilter(request,response);
+            }
         }
+       catch (UnauthorizedException exception)
+       {
+           handleException(response,HttpStatus.UNAUTHORIZED,exception.getMessage());
+       }
+        catch (ExpiredJwtException exception)
+        {
+            handleException(response,HttpStatus.UNAUTHORIZED,"Token Expired");
+        }
+        catch (BearerTokenNotFoundException exception)
+        {
+            handleException(response,HttpStatus.FORBIDDEN,exception.getMessage());
+        }
+        catch (Exception exception)
+        {
+            handleException(response,HttpStatus.BAD_REQUEST,exception.getMessage());
+        }
+
+    }
+
+    private void handleException(HttpServletResponse response,HttpStatus httpStatus,String message) throws IOException
+    {
+        AuthExceptionHandler exceptionHandler = new AuthExceptionHandler();
+        response.setStatus(httpStatus.value());
+        ResponseEntity<AuthErrorResponse> errorResponse= exceptionHandler.errorResponse(httpStatus,message);
+        response.setContentType("application/json");
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(errorResponse.getBody()));
     }
 
     @Override
@@ -63,4 +101,5 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.startsWith("/api/user/") || path.startsWith("/api/restaurant/");
     }
+
 }

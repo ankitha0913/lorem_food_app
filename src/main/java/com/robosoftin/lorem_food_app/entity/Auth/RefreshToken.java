@@ -20,7 +20,7 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     //many to one - if user logs in from 2 different devices
-    @ManyToOne(targetEntity = UserInfo.class,cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = UserInfo.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserInfo user;
 

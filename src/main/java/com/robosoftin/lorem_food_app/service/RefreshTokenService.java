@@ -16,8 +16,8 @@ import static java.time.Instant.now;
 
 @Service
 public class RefreshTokenService {
-    //3 days- 60 * 60 * 24 * 3
-    static final long REFRESH_TOKEN_VALIDITY = 60 * 60 * 24 * 3;
+    //3 days
+    static final long REFRESH_TOKEN_VALIDITY = 60 * 1000;
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
@@ -26,6 +26,9 @@ public class RefreshTokenService {
     private UserRepository userRepository;
     @Autowired
     private JwtUtility jwtUtility;
+
+    @Autowired
+    private BlacklistTokenService blacklistTokenService;
 
     public RefreshToken createRefreshToken(int userId) {
         RefreshToken refreshToken = new RefreshToken();
@@ -46,14 +49,15 @@ public class RefreshTokenService {
         return refreshToken.getUser().getEmailId();
     }
 
-    public boolean validateToken(String token,String emailId)
+    public boolean validateToken(String token,String emailId,String jwt)
     {
         RefreshToken refreshToken=refreshTokenRepository.findByToken(token);
         if (emailId.equals(refreshToken.getUser().getEmailId()))
         {
             if (now().isAfter(refreshToken.getExpiryDate()))
             {
-                refreshTokenRepository.delete(refreshToken);
+                blacklistTokenService.addToBlacklist(jwt);
+                refreshTokenRepository.deleteById(refreshToken.getId());
                 return false;
             }
             else

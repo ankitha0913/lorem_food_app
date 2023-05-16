@@ -59,7 +59,7 @@ public class AuthController {
 
     @GetMapping("/refresh")
     public ResponseEntity<JwtResponse> refresh(HttpServletRequest httpServletRequest) {
-        String emailId=(String) httpServletRequest.getAttribute(RefreshFilter.emailId);
+        String emailId=(String) httpServletRequest.getAttribute("emailId");
         JwtResponse jwtResponse=refreshTokenService.generateNewToken(jwtService.loadUserByUsername(emailId));
         return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
