@@ -40,6 +40,7 @@ public class RefreshFilter extends OncePerRequestFilter {
         String token = null;
         String refreshToken = request.getHeader("refresh-token");
         String authorization = request.getHeader("Authorization");
+        AuthExceptionHandler exceptionHandler = new AuthExceptionHandler();
         try{
             if(refreshToken!=null)
             {
@@ -75,30 +76,20 @@ public class RefreshFilter extends OncePerRequestFilter {
         }
         catch (UnauthorizedException exception)
         {
-            handleException(response,HttpStatus.UNAUTHORIZED,exception.getMessage());
+            exceptionHandler.handleFilterException(response,HttpStatus.UNAUTHORIZED,exception.getMessage());
         }
         catch (UserNotFoundException exception)
         {
-            handleException(response,HttpStatus.NOT_FOUND,exception.getMessage());
+            exceptionHandler.handleFilterException(response,HttpStatus.NOT_FOUND,exception.getMessage());
         }
         catch (BearerTokenNotFoundException exception)
         {
-            handleException(response,HttpStatus.FORBIDDEN,exception.getMessage());
+            exceptionHandler.handleFilterException(response,HttpStatus.FORBIDDEN,exception.getMessage());
         }
         catch (Exception exception)
         {
-            handleException(response,HttpStatus.BAD_REQUEST,exception.getMessage());
+            exceptionHandler.handleFilterException(response,HttpStatus.BAD_REQUEST,exception.getMessage());
         }
-    }
-
-    private void handleException(HttpServletResponse response, HttpStatus httpStatus, String message) throws IOException
-    {
-        AuthExceptionHandler exceptionHandler = new AuthExceptionHandler();
-        response.setStatus(httpStatus.value());
-        ResponseEntity<AuthErrorResponse> errorResponse= exceptionHandler.errorResponse(httpStatus,message);
-        response.setContentType("application/json");
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(errorResponse.getBody()));
     }
 
     @Override

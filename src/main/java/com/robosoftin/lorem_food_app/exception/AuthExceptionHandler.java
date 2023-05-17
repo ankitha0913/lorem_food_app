@@ -1,9 +1,13 @@
 package com.robosoftin.lorem_food_app.exception;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.io.IOException;
 
 @ControllerAdvice()
 public class AuthExceptionHandler {
@@ -35,7 +39,14 @@ public class AuthExceptionHandler {
         return new ResponseEntity<>(error,httpStatus);
     }
 
-
+    public void handleFilterException(HttpServletResponse response, HttpStatus httpStatus, String message) throws IOException
+    {
+        response.setStatus(httpStatus.value());
+        ResponseEntity<AuthErrorResponse> errorResponse= errorResponse(httpStatus,message);
+        response.setContentType("application/json");
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(errorResponse.getBody()));
+    }
 
 }
 

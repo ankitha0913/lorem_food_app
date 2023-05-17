@@ -5,7 +5,6 @@ import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.Auth.RefreshToken;
 import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
 import com.robosoftin.lorem_food_app.model.JwtResponse;
-import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +16,7 @@ import static java.time.Instant.now;
 @Service
 public class RefreshTokenService {
     //3 days
-    static final long REFRESH_TOKEN_VALIDITY = 60 * 1000;
+    static final long REFRESH_TOKEN_VALIDITY = 60 * 60 * 24 * 3 * 1000;
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;

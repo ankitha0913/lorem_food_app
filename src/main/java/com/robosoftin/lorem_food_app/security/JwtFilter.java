@@ -44,6 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String authorization = request.getHeader("Authorization");
         String token = null;
         String username = null;
+        AuthExceptionHandler exceptionHandler = new AuthExceptionHandler();
         try{
             if(authorization!=null && authorization.startsWith("Bearer ")){
                 token = authorization.substring(7);
@@ -69,31 +70,21 @@ public class JwtFilter extends OncePerRequestFilter {
         }
        catch (UnauthorizedException exception)
        {
-           handleException(response,HttpStatus.UNAUTHORIZED,exception.getMessage());
+           exceptionHandler.handleFilterException(response,HttpStatus.UNAUTHORIZED,exception.getMessage());
        }
         catch (ExpiredJwtException exception)
         {
-            handleException(response,HttpStatus.UNAUTHORIZED,"Token Expired");
+            exceptionHandler.handleFilterException(response,HttpStatus.UNAUTHORIZED,"Token Expired");
         }
         catch (BearerTokenNotFoundException exception)
         {
-            handleException(response,HttpStatus.FORBIDDEN,exception.getMessage());
+            exceptionHandler.handleFilterException(response,HttpStatus.FORBIDDEN,exception.getMessage());
         }
         catch (Exception exception)
         {
-            handleException(response,HttpStatus.BAD_REQUEST,exception.getMessage());
+            exceptionHandler.handleFilterException(response,HttpStatus.BAD_REQUEST,exception.getMessage());
         }
 
-    }
-
-    private void handleException(HttpServletResponse response,HttpStatus httpStatus,String message) throws IOException
-    {
-        AuthExceptionHandler exceptionHandler = new AuthExceptionHandler();
-        response.setStatus(httpStatus.value());
-        ResponseEntity<AuthErrorResponse> errorResponse= exceptionHandler.errorResponse(httpStatus,message);
-        response.setContentType("application/json");
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(errorResponse.getBody()));
     }
 
     @Override
