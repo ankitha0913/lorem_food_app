@@ -35,4 +35,10 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
     }
 
+//    @GetMapping("/my-cart")
+//    public ResponseEntity<StatusResponse> getMyCart(@RequestParam String emailId)
+//    {
+//        StatusResponse statusResponse=cartItemService.getMyCart(emailId);
+//        return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
+//    }
 }

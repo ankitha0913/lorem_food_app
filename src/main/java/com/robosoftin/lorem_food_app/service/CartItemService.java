@@ -6,6 +6,7 @@ import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.Auth.UserInfo;
 import com.robosoftin.lorem_food_app.entity.Cart.CartItem;
 import com.robosoftin.lorem_food_app.entity.Cart.CartItemKey;
+import com.robosoftin.lorem_food_app.entity.Cart.MyCart;
 import com.robosoftin.lorem_food_app.model.CartRequest;
 import com.robosoftin.lorem_food_app.model.ClearCartRequest;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -69,4 +71,11 @@ public class CartItemService {
         cartService.deleteCart(cart_id);
         return new StatusResponse(HttpStatus.OK.value(),"Cart deleted successfully");
     }
+
+//    public StatusResponse getMyCart(String emailId)
+//    {
+//        UserInfo userInfo=userRepository.findByEmailId(emailId);
+//        List<MyCart> myCart=cartService.getMyCart(userInfo.getId());
+//
+//    }
 }

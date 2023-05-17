@@ -6,10 +6,12 @@ import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.Auth.UserInfo;
 import com.robosoftin.lorem_food_app.entity.Cart.MyCart;
 import com.robosoftin.lorem_food_app.entity.Cart.MyCartKey;
+import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.utility.IdGeneratorUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -42,5 +44,10 @@ public class CartService {
     public void deleteCart(long cart_id)
     {
         cartRepository.deleteByCartId(cart_id);
+    }
+
+    public List<MyCart> getMyCart(int userId)
+    {
+        return cartRepository.findByUserId(userId);
     }
 }
