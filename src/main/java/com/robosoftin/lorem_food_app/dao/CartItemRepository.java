@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, CartItemKey> {
     @Modifying
@@ -16,4 +18,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, CartItemKey>
     @Modifying
     @Query("DELETE CartItem c WHERE c.cartItemKey.myCart.cartId=?1 AND c.cartItemKey.menuItem.id=?2")
     void deleteByCartIdAndMenuItemId(long cartId,int menuItemId);
+
+    @Query("SELECT c FROM CartItem c WHERE c.cartItemKey.myCart.cartId=?1")
+    List<CartItem> findByCartId(long cartId);
 }

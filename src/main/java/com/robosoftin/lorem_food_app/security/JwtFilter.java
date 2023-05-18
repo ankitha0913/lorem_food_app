@@ -19,6 +19,7 @@ import org.apache.http.impl.client.RequestWrapper;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.io.IOUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,8 +57,15 @@ public class JwtFilter extends OncePerRequestFilter {
             if (authorization != null && authorization.startsWith("Bearer ")) {
                 token = authorization.substring(7);
                 username = jwtUtility.getUsernameFromToken(token);
-                Map<String, Object> jsonRequest = new ObjectMapper().readValue(wrappedRequest.getInputStream(), Map.class);
-                if (!jsonRequest.get("emailId").toString().equals(username))
+                String emailId=null;
+                if(wrappedRequest.getMethod().equals("GET"))
+                    emailId=request.getParameter("emailId");
+                else
+                {
+                    Map<String, Object> jsonRequest = new ObjectMapper().readValue(wrappedRequest.getInputStream(), Map.class);
+                    emailId=jsonRequest.get("emailId").toString();
+                }
+                if (!emailId.equals(username))
                     throw new UnauthorizedException("Invalid token!");
             } else
                 throw new BearerTokenNotFoundException("Couldn't find bearer token");

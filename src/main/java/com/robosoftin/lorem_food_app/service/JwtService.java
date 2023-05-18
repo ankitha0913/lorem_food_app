@@ -3,7 +3,7 @@ package com.robosoftin.lorem_food_app.service;
 import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.Auth.UserInfo;
 import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
-import com.robosoftin.lorem_food_app.exception.UserNotFoundException;
+import com.robosoftin.lorem_food_app.exception.NotFoundException;
 import com.robosoftin.lorem_food_app.model.JwtRequest;
 import com.robosoftin.lorem_food_app.model.JwtResponse;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
@@ -42,7 +42,7 @@ public class JwtService implements UserDetailsService {
     public UserDetails loadUserByUsername(String emailId) throws UsernameNotFoundException {
         UserInfo user=userRepository.findByEmailId(emailId);
         if (user==null)
-            throw new UserNotFoundException("User Not Found - "+emailId);
+            throw new NotFoundException("User Not Found - "+emailId);
         return new User(user.getEmailId(),user.getPassword(),new ArrayList<>());
     }
 

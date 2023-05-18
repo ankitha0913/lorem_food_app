@@ -18,6 +18,9 @@ public class StatusResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List data;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private RestaurantResponse menu;
+
     public StatusResponse(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
@@ -26,6 +29,11 @@ public class StatusResponse {
     public StatusResponse(int statusCode, List data) {
         this.statusCode = statusCode;
         this.data = data;
+    }
+
+    public StatusResponse(int statusCode, RestaurantResponse restaurantResponse) {
+        this.statusCode = statusCode;
+        this.menu = restaurantResponse;
     }
 
     public StatusResponse(int statusCode, String message, String secretCode) {

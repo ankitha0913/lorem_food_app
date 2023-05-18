@@ -6,8 +6,8 @@ import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.Auth.UserInfo;
 import com.robosoftin.lorem_food_app.entity.Cart.MyCart;
 import com.robosoftin.lorem_food_app.entity.Cart.MyCartKey;
-import com.robosoftin.lorem_food_app.model.StatusResponse;
-import com.robosoftin.lorem_food_app.utility.IdGeneratorUtility;
+import com.robosoftin.lorem_food_app.utility.UniqueIdGenerator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class CartService {
         try {
             return cartRepository.findById(myCartKey).get();
         }catch (NoSuchElementException exception){
-            return cartRepository.save(new MyCart(IdGeneratorUtility.nextId(),myCartKey));
+            return cartRepository.save(new MyCart(UniqueIdGenerator.generateUniqueId(),myCartKey));
         }
     }
 
@@ -40,7 +40,7 @@ public class CartService {
         MyCart myCart=cartRepository.findById(new MyCartKey(userInfo,restaurantRepository.findById(restId).get())).get();
         return myCart.getCartId();
     }
-
+    @Transactional
     public void deleteCart(long cart_id)
     {
         cartRepository.deleteByCartId(cart_id);
@@ -49,5 +49,15 @@ public class CartService {
     public List<MyCart> getMyCart(int userId)
     {
         return cartRepository.findByUserId(userId);
+    }
+
+    public MyCart getCartByRestIdAndUserId(int restId,int userId)
+    {
+        return cartRepository.findByRestIdAndUserId(restId,userId);
+    }
+
+    public MyCart findByCartId(long cartId)
+    {
+        return cartRepository.findByCartId(cartId);
     }
 }

@@ -1,6 +1,7 @@
 package com.robosoftin.lorem_food_app.controller;
 import com.robosoftin.lorem_food_app.entity.Restaurant.MenuItem;
 import com.robosoftin.lorem_food_app.entity.Restaurant.Restaurant;
+import com.robosoftin.lorem_food_app.model.RestaurantResponse;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.service.MenuService;
 import com.robosoftin.lorem_food_app.service.RestaurantService;
@@ -29,8 +30,10 @@ public class RestaurantController {
 
     @GetMapping("/{restId}/menu")
     public ResponseEntity<StatusResponse> fetchMenu(@PathVariable int restId){
+        Restaurant restaurant=restaurantService.getRestaurantById(restId);
          List<MenuItem> menuItemList=menuService.fetchMenu(restId);
-        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), menuItemList));
+        RestaurantResponse restaurantResponse =new RestaurantResponse(restaurant,menuItemList);
+        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), restaurantResponse));
     }
 
     @GetMapping("/{restId}/menu/search")

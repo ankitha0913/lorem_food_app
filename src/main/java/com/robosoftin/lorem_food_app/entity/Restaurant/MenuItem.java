@@ -44,4 +44,9 @@ public class MenuItem {
         this.rating = rating;
         this.image = image;
     }
+
+    public MenuItem removeMenuField()
+    {
+        return new MenuItem(this.id,this.name,this.description,this.dishType,this.breakfast,this.veg,this.price,this.rating,this.image);
+    }
 }

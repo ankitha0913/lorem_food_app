@@ -1,8 +1,5 @@
 package com.robosoftin.lorem_food_app.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.robosoftin.lorem_food_app.exception.*;
 import com.robosoftin.lorem_food_app.service.BlacklistTokenService;
 import com.robosoftin.lorem_food_app.service.JwtService;
@@ -13,11 +10,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -72,13 +66,13 @@ public class RefreshFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request,response);
             }
             else
-                throw new UserNotFoundException("No match found for refresh token");
+                throw new NotFoundException("No match found for refresh token");
         }
         catch (UnauthorizedException exception)
         {
             exceptionHandler.handleFilterException(response,HttpStatus.UNAUTHORIZED,exception.getMessage());
         }
-        catch (UserNotFoundException exception)
+        catch (NotFoundException exception)
         {
             exceptionHandler.handleFilterException(response,HttpStatus.NOT_FOUND,exception.getMessage());
         }
