@@ -41,8 +41,8 @@ public class RefreshFilter extends OncePerRequestFilter {
                 if(authorization!=null && authorization.startsWith("Bearer ")){
                     token = authorization.substring(7);
                     try{
-                        jwtUser = jwtUtility.getUsernameFromToken(token);
                         username = refreshTokenService.getUsernameFromToken(refreshToken);
+                        jwtUser = jwtUtility.getUsernameFromToken(token);
                         if (jwtUser.equals(username))
                             blacklistTokenService.addToBlacklist(token);
                         else
