@@ -58,6 +58,7 @@ public class CartItemService {
     {
         cartItemRepository.deleteByCartId(cartId);
     }
+    @Transactional
     public StatusResponse deleteCartItem(CartRequest cartRequest){
         int menuItemId=cartRequest.getMenuItemId();
         UserInfo userInfo=userRepository.findByEmailId(cartRequest.getEmailId());
