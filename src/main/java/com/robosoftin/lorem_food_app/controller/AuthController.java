@@ -57,11 +57,18 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(),"Password updated for user "+userInfo.getEmailId()));
     }
 
-    @GetMapping("/refresh")
+    @GetMapping("/session/refresh")
     public ResponseEntity<JwtResponse> refresh(HttpServletRequest httpServletRequest) {
         String emailId=(String) httpServletRequest.getAttribute("emailId");
         JwtResponse jwtResponse=refreshTokenService.generateNewToken(jwtService.loadUserByUsername(emailId));
         return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
 
+    @PostMapping("/session/logout")
+    public ResponseEntity<StatusResponse> logout(HttpServletRequest httpServletRequest)
+    {
+        String emailId=(String) httpServletRequest.getAttribute("emailId");
+        StatusResponse statusResponse=refreshTokenService.deleteToken(emailId);
+        return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
+    }
 }

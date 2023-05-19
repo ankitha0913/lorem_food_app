@@ -3,10 +3,14 @@ package com.robosoftin.lorem_food_app.service;
 import com.robosoftin.lorem_food_app.dao.RefreshTokenRepository;
 import com.robosoftin.lorem_food_app.dao.UserRepository;
 import com.robosoftin.lorem_food_app.entity.Auth.RefreshToken;
+import com.robosoftin.lorem_food_app.entity.Auth.UserInfo;
 import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
 import com.robosoftin.lorem_food_app.model.JwtResponse;
+import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
@@ -69,5 +73,13 @@ public class RefreshTokenService {
     public JwtResponse generateNewToken(UserDetails userDetails){
         final String token = jwtUtility.generateToken(userDetails);
         return new JwtResponse(token,"New Jwt token generated");
+    }
+
+    @Transactional
+    public StatusResponse deleteToken(String emailId)
+    {
+        UserInfo userInfo=userRepository.findByEmailId(emailId);
+        refreshTokenRepository.deleteByUserId(userInfo.getId());
+        return new StatusResponse(HttpStatus.OK.value(),"User logged out successfully");
     }
 }

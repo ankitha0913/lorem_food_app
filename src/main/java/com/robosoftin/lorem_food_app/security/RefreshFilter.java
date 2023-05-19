@@ -62,7 +62,7 @@ public class RefreshFilter extends OncePerRequestFilter {
                 if (refreshTokenService.validateToken(refreshToken,username,token))
                     request.setAttribute("emailId",username);
                 else
-                    throw new UnauthorizedException("Refresh Token Expired!");
+                    throw new UnauthorizedException("Refresh Token Expired! - User Logged Out");
                 filterChain.doFilter(request,response);
             }
             else
@@ -89,6 +89,6 @@ public class RefreshFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return !path.startsWith("/api/user/refresh");
+        return !path.startsWith("/api/user/session");
     }
 }
