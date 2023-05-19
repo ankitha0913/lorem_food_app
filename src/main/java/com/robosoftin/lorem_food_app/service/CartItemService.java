@@ -47,13 +47,13 @@ public class CartItemService {
         return new StatusResponse(HttpStatus.OK.value(),"Item added to cart");
     }
 
-//    @Transactional
+
     public void deleteByCartIdAndMenuItemId(long cartId,int menuItemId)
     {
         cartItemRepository.deleteByCartIdAndMenuItemId(cartId,menuItemId);
     }
 
-//    @Transactional
+
     public void deleteByCartId(long cartId)
     {
         cartItemRepository.deleteByCartId(cartId);

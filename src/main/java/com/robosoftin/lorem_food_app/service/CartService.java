@@ -40,7 +40,7 @@ public class CartService {
         MyCart myCart=cartRepository.findById(new MyCartKey(userInfo,restaurantRepository.findById(restId).get())).get();
         return myCart.getCartId();
     }
-//    @Transactional
+
     public void deleteCart(long cart_id)
     {
         cartRepository.deleteByCartId(cart_id);

@@ -12,6 +12,7 @@ import com.robosoftin.lorem_food_app.enums.OrderStatus;
 import com.robosoftin.lorem_food_app.model.OrderRequest;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.utility.UniqueIdGenerator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class OrderService {
     private OrderItemRepository orderItemRepository;
     @Autowired
     private CartItemService cartItemService;
+    @Transactional
     public StatusResponse placeOrder(OrderRequest orderRequest) throws Exception {
         MyCart myCart=cartService.findByCartId(orderRequest.getCartId());
         if (myCart==null)
