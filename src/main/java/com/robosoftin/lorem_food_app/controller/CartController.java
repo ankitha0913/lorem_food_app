@@ -35,6 +35,12 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
     }
 
+    @DeleteMapping("/remove-cart-item")
+    public ResponseEntity<StatusResponse> removeFromCart(@RequestBody CartRequest cartRequest) {
+        StatusResponse statusResponse = cartItemService.removeCartItem(cartRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
+    }
+
     @GetMapping("/my-cart")
     public ResponseEntity<StatusResponse> getMyCart(@RequestParam String emailId)
     {

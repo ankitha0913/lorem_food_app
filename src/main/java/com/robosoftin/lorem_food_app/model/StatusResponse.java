@@ -15,6 +15,9 @@ public class StatusResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private long orderId;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List data;
 
@@ -23,6 +26,12 @@ public class StatusResponse {
 
     public StatusResponse(int statusCode, String message) {
         this.statusCode = statusCode;
+        this.message = message;
+    }
+
+    public StatusResponse(int statusCode,long orderId, String message) {
+        this.statusCode = statusCode;
+        this.orderId=orderId;
         this.message = message;
     }
 

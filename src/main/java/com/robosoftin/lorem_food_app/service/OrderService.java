@@ -55,7 +55,7 @@ public class OrderService {
             }
             cartItemService.deleteByCartId(cartId);
             cartService.deleteCart(cartId);
-            return new StatusResponse(HttpStatus.OK.value(), "Order placed successfully");
+            return new StatusResponse(HttpStatus.OK.value(), order.getId(), "Order placed successfully");
         }
         else
             throw new Exception("EmailId and CartId user mismatch!");

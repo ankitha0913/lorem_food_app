@@ -10,6 +10,7 @@ import com.robosoftin.lorem_food_app.service.JwtService;
 import com.robosoftin.lorem_food_app.service.RefreshTokenService;
 import com.robosoftin.lorem_food_app.service.SecretCodeService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,10 +59,10 @@ public class AuthController {
     }
 
     @GetMapping("/session/refresh")
-    public ResponseEntity<JwtResponse> refresh(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<StatusResponse> refresh(HttpServletRequest httpServletRequest,HttpServletResponse response) {
         String emailId=(String) httpServletRequest.getAttribute("emailId");
-        JwtResponse jwtResponse=refreshTokenService.generateNewToken(jwtService.loadUserByUsername(emailId));
-        return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
+        StatusResponse statusResponse=refreshTokenService.generateNewToken(jwtService.loadUserByUsername(emailId),response);
+        return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
     }
 
     @PostMapping("/session/logout")

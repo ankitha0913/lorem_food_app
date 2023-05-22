@@ -8,6 +8,7 @@ import com.robosoftin.lorem_food_app.exception.UnauthorizedException;
 import com.robosoftin.lorem_food_app.model.JwtResponse;
 import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.utility.JwtUtility;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -70,9 +71,10 @@ public class RefreshTokenService {
             return false;
     }
 
-    public JwtResponse generateNewToken(UserDetails userDetails){
+    public StatusResponse generateNewToken(UserDetails userDetails, HttpServletResponse response){
         final String token = jwtUtility.generateToken(userDetails);
-        return new JwtResponse(token,"New Jwt token generated");
+        response.setHeader("Authorization","Bearer "+token);
+        return new StatusResponse(HttpStatus.OK.value(),"New Jwt token generated");
     }
 
     @Transactional

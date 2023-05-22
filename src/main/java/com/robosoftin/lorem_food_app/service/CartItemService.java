@@ -30,8 +30,6 @@ public class CartItemService {
 
     final private CartService cartService;
 
-    final private RestaurantService restaurantService;
-
     public StatusResponse addToCartItem(CartRequest cartRequest){
         int menuItemId=cartRequest.getMenuItemId();
         UserInfo userInfo=userRepository.findByEmailId(cartRequest.getEmailId());
@@ -47,10 +45,13 @@ public class CartItemService {
         return new StatusResponse(HttpStatus.OK.value(),"Item added to cart");
     }
 
-
+    @Transactional
     public void deleteByCartIdAndMenuItemId(long cartId,int menuItemId)
     {
         cartItemRepository.deleteByCartIdAndMenuItemId(cartId,menuItemId);
+        List<CartItem> cartItems=findByCartId(cartId);
+        if(cartItems.isEmpty())
+            cartService.deleteCart(cartId);
     }
 
 
@@ -71,6 +72,17 @@ public class CartItemService {
             cartItem.setQuantity(cartItem.getQuantity()-1);
             cartItemRepository.save(cartItem);
         }
+        return new StatusResponse(HttpStatus.OK.value(),"Item removed from cart");
+    }
+
+    @Transactional
+    public StatusResponse removeCartItem(CartRequest cartRequest){
+        int menuItemId=cartRequest.getMenuItemId();
+        UserInfo userInfo=userRepository.findByEmailId(cartRequest.getEmailId());
+        int restId = menuItemRepository.getRestId(menuItemId);
+        long cartId=cartService.getCartId(userInfo,restId);
+        cartItemRepository.findById(new CartItemKey(cartService.findByCartId(cartId),menuItemRepository.findById(menuItemId).get())).get();//throws no value present, if item not present
+        deleteByCartIdAndMenuItemId(cartId,menuItemId);
         return new StatusResponse(HttpStatus.OK.value(),"Item removed from cart");
     }
 
@@ -101,14 +113,12 @@ public class CartItemService {
     {
         UserInfo userInfo=userRepository.findByEmailId(emailId);
         MyCart myCart=cartService.getCartByRestIdAndUserId(restId,userInfo.getId());
-        RestaurantResponse restaurantResponse = new RestaurantResponse();
+        RestaurantResponse restaurantResponse = new RestaurantResponse(new ArrayList<>());
         if(myCart!=null)
         {
             List<CartItem> cartItems=findByCartId(myCart.getCartId());
             restaurantResponse= new RestaurantResponse(myCart.getMyCartKey().getRestaurant(),getMenuResponse(cartItems),myCart.getCartId());
         }
-        else
-            restaurantResponse=new RestaurantResponse(new ArrayList<>());
         return new StatusResponse(HttpStatus.OK.value(),restaurantResponse);
     }
 
