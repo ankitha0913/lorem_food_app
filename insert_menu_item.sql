@@ -15,7 +15,7 @@ VALUES (1,false,"Paneer marinated with masala and roasted with ghee and other ve
 (7,true,"Savoury rice cake with sambar, originating from South India.",
 "MAINCOURSE","Idli Sambar",60,4.7,true,3,"https://4.bp.blogspot.com/-7h4QRipjXu4/U6B3cPxxOPI/AAAAAAAAJQo/nKi7zDdyilg/s1600/Idli+Sambar.JPG"),
 (8,true,"Prepared with freshly boiled water and leaf buds of the tea.",
-"","Tea",20,4.2,true,3,"https://tse1.mm.bing.net/th?id=OIP.jYwu15--4Lk9rfTCMMeo7gHaHa&pid=Api&P=0"),
+"BEVERAGE","Tea",20,4.2,true,3,"https://tse1.mm.bing.net/th?id=OIP.jYwu15--4Lk9rfTCMMeo7gHaHa&pid=Api&P=0"),
 (9,false,"Made with cheese and pepper and tastes absolutely delicious.",
 "APPETIZER","Chicken Cheese Pepper Sausage Fry",350,4.4,false,3,"https://tse1.mm.bing.net/th?id=OIP.ecEBSFMAye87ZlQONBWv8QHaEK&pid=Api&P=0"),
 (10,false,"Pomfret fish is marinated with spices, coated with flour and is shallow fried on tava or griddle.",
