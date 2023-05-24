@@ -6,6 +6,8 @@ import com.robosoftin.lorem_food_app.model.StatusResponse;
 import com.robosoftin.lorem_food_app.service.MenuService;
 import com.robosoftin.lorem_food_app.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +31,11 @@ public class RestaurantController {
     }
 
     @GetMapping("/{restId}/menu")
-    public ResponseEntity<StatusResponse> fetchMenu(@PathVariable int restId){
+    public ResponseEntity<StatusResponse> fetchMenu(@PathVariable int restId,@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "6") int size){
         Restaurant restaurant=restaurantService.getRestaurantById(restId);
-         List<MenuItem> menuItemList=menuService.fetchMenu(restId);
+        Pageable paging = PageRequest.of(page, size);
+        List<MenuItem> menuItemList=menuService.fetchMenu(restId,paging);
         RestaurantResponse restaurantResponse =new RestaurantResponse(restaurant,menuItemList);
         return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse(HttpStatus.OK.value(), restaurantResponse));
     }

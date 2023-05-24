@@ -2,15 +2,17 @@ package com.robosoftin.lorem_food_app.dao;
 
 import com.robosoftin.lorem_food_app.entity.Restaurant.MenuItem;
 import com.robosoftin.lorem_food_app.enums.DishType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface MenuItemRepository extends JpaRepository<MenuItem,Integer> {
 
     @Query("SELECT new MenuItem(m.id,m.name,m.description,m.dishType,m.breakfast,m.veg,m.price,m.rating,m.image) FROM MenuItem m WHERE m.menu.restaurant.id=?1")
-    List<MenuItem> findRestaurantMenu(int restId);
+    Page<MenuItem> findRestaurantMenu(int restId, Pageable pageable);
 
     @Query("SELECT new MenuItem(m.id,m.name,m.description,m.dishType,m.breakfast,m.veg,m.price,m.rating,m.image) FROM MenuItem m WHERE m.menu.restaurant.id=?1 AND m.breakfast=true")
     List<MenuItem> findBreakfastMenu(int restId);
