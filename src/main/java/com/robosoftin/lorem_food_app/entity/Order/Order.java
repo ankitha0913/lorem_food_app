@@ -6,12 +6,14 @@ import com.robosoftin.lorem_food_app.entity.Restaurant.Restaurant;
 import com.robosoftin.lorem_food_app.enums.DeliveryType;
 import com.robosoftin.lorem_food_app.enums.OrderStatus;
 import com.robosoftin.lorem_food_app.enums.PaymentMode;
-import com.robosoftin.lorem_food_app.enums.RestaurantStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -28,8 +30,8 @@ public class Order {
     @ManyToOne(targetEntity = Restaurant.class)
     @JoinColumn(name = "rest_id", referencedColumnName = "id")
     private Restaurant restaurant;
-    private String date;
-    private String time;
+    private LocalDate date;
+    private LocalTime time;
     @ManyToOne(targetEntity = Address.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;

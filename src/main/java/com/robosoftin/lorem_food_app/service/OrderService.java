@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -42,8 +44,10 @@ public class OrderService {
             double extraCharge=40.0;
             double discount=20.0;
             double totalAmount=orderRequest.getItemCost()+extraCharge-discount;
+            LocalDate date=LocalDate.parse(orderRequest.getDate());
+            LocalTime localTime =LocalTime.parse( orderRequest.getTime() );
             Order order=orderRepository.save(new Order(UniqueIdGenerator.generateUniqueId(),userInfo,restaurant,
-                    orderRequest.getDate(),orderRequest.getTime(),orderRequest.getAddress(),
+                    date,localTime,orderRequest.getAddress(),
                     orderRequest.getCookingInstruction(),orderRequest.getDeliveryType(),
                     orderRequest.getContactName(),orderRequest.getMobileNo(),
                     orderRequest.getDeliveryInstruction(),orderRequest.getPaymentMode(),
